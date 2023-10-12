@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="clipboard.png" type="image/x-icon">
+
+    <style>
+        .red-background {
+            background: radial-gradient(circle at 10% 20%, rgb(57, 207, 215) 0%, rgb(148, 189, 246) 100.7%);
+        }
+        body {
+            font-family: 'Roboto';
+            background: linear-gradient(-60deg, #fb8a68, #f58eb6, #23a6d5, #2fedc0, #f5f585);
+            background-size: 500% 500%;
+            animation: gradientAnimation 14s ease-in-out infinite alternate;
+            height: 100vh;
+        }
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        .navbar {
+            background-color: black; /* Set the navbar background color to black */
+        }
+        .navbar-text, .nav-link {
+            color: white; /* Set text links in the navbar to white */
+        }
+        .list-group-item {
+            font-size: 23px; /* Increase font size for list items */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <img src="WhatsApp Image 2023-10-13 at 1.49.25 AM.jpeg" alt="Your Image" class="rounded-circle" width="100">
+            <span id="name" class="navbar-text mx-2"><h4>Creator - <br><sub>Vishal Raj (Vishu)</sub></h2></span>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://instagram.com/vishalrajyaduvanshi59?igshid=OGQ5ZDc2ODk2ZA==">Instagram</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="showContactMessage();">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>To-Do List</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="taskInput" class="form-control" placeholder="Add a new task">
+            <div class="input-group-append">
+                <button id="addTask" class="btn btn-success">Add</button>
+            </div>
+        </div>
+        <ul id="taskList" class="list-group"></ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.classList.add('red-background');
+                li.innerHTML = `
+                    ${task}
+                    <button class="btn btn-danger btn-sm float-right delete" data-index="${index}">Delete</button>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        function saveTasks(tasks) {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        document.getElementById('addTask').addEventListener('click', function() {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            if (taskText !== '') {
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks.push(taskText);
+                saveTasks(tasks);
+                loadTasks();
+                taskInput.value = '';
+            }
+        });
+
+        document.getElementById('taskList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete')) {
+                const index = event.target.getAttribute('data-index');
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks.splice(index, 1);
+                saveTasks(tasks);
+                loadTasks();
+            }
+        });
+
+        function showContactMessage() {
+            alert('Sorry beta, privacy hai, number nahi de sakta.');
+        }
+    </script>
+</body>
+</html>
